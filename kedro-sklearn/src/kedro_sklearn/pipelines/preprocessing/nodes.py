@@ -27,6 +27,7 @@ def preprocess_train(train_set: pd.DataFrame) -> Tuple[any, any]:
     X = vectorizer.fit_transform(corpus)
 
     # Logging
+    LOGGER.info("## Train preprocessing")
     LOGGER.info("corpus size: %d" % train_set.shape[0])
     LOGGER.info("vector features: %d" % X.shape[1])
 
@@ -46,6 +47,7 @@ def preprocess_test(test_set: pd.DataFrame, vectorizer: any) -> any:
     X = vectorizer.transform(corpus)
 
     # Logging
+    LOGGER.info("## Test preprocessing")
     LOGGER.info("corpus size: %d" % test_set.shape[0])
     LOGGER.info("vector features: %d" % X.shape[1])
 
