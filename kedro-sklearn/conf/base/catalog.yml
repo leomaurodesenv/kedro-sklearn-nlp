@@ -3,16 +3,21 @@
 # Documentation for this file format can be found in "The Data Catalog"
 # Link: https://docs.kedro.org/en/stable/data/data_catalog.html
 
-train:
+_csv: &csv
   type: pandas.CSVDataSet
+  load_args:
+    sep: ','
+
+train:
+  <<: *csv
   filepath: data/01_raw/train.csv
 
 test:
-  type: pandas.CSVDataSet
+  <<: *csv
   filepath: data/01_raw/test.csv
 
 sample_submission:
-  type: pandas.CSVDataSet
+  <<: *csv
   filepath: data/01_raw/sample_submission.csv
 
 train_vectorizer:
