@@ -14,3 +14,8 @@ test:
 sample_submission:
   type: pandas.CSVDataSet
   filepath: data/01_raw/sample_submission.csv
+
+train_vectorizer:
+  type: pickle.PickleDataSet
+  filepath: data/04_feature/train_vectorizer.pkl
+  backend: pickle
