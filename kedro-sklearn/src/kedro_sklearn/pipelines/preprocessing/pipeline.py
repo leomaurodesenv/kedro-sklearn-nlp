@@ -12,13 +12,20 @@ def create_pipeline(**kwargs) -> Pipeline:
         [
             node(
                 func=preprocess_train,
-                inputs=["train", "params:preprocessing.dataset"],
-                outputs=["train_vectorizer", "train_X", "train_y"],
+                inputs=dict(
+                    train_set="train",
+                    parameters="params:preprocessing.dataset",
+                ),
+                outputs=["feature_vectorizer", "train_X", "train_y"],
                 name="preprocess_train_node",
             ),
             node(
                 func=preprocess_test,
-                inputs=["test", "train_vectorizer", "params:preprocessing.dataset"],
+                inputs=dict(
+                    test_set="test",
+                    vectorizer="feature_vectorizer",
+                    parameters="params:preprocessing.dataset",
+                ),
                 outputs="test_X",
                 name="preprocess_test_node",
             ),

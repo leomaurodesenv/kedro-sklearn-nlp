@@ -17,14 +17,18 @@ def preprocess_train(train_set: pd.DataFrame, parameters: Dict) -> Tuple:
 
     Args:
         train_set: Raw data
+        parameters: Dataset parameters
     Returns:
-        vectorizer: sklearn.feature_extraction.text.CountVectorizer
+        vectorizer: Corpus vectorizer
         X: numpy array of the corpus
+        y: numpy array of the labels
     """
     # Vectorizer the dataset
     corpus = train_set[parameters["text_column"]]
     y = train_set[parameters["target_column"]]
-    vectorizer = CountVectorizer(lowercase=True, ngram_range=(1, 2), max_features=10_000)
+    vectorizer = CountVectorizer(
+        lowercase=True, ngram_range=(1, 2), max_features=10_000
+    )
     X = vectorizer.fit_transform(corpus)
 
     # Logging
@@ -40,6 +44,8 @@ def preprocess_test(test_set: pd.DataFrame, vectorizer: any, parameters: Dict) -
 
     Args:
         test_set: Raw data
+        vectorizer: Corpus vectorizer
+        parameters: Dataset parameters
     Returns:
         X: numpy array of the corpus
     """
