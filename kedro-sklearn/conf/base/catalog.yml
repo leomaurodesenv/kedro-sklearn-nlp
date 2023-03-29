@@ -8,6 +8,12 @@ _csv: &csv
   load_args:
     sep: ','
 
+_pickle: &pickle
+  type: pickle.PickleDataSet
+  backend: joblib
+
+
+## Dataset
 train:
   <<: *csv
   filepath: data/01_raw/train.csv
@@ -20,7 +26,20 @@ sample_submission:
   <<: *csv
   filepath: data/01_raw/sample_submission.csv
 
+## Features
 feature_vectorizer:
-  type: pickle.PickleDataSet
-  filepath: data/04_feature/vectorizer.pkl
-  backend: pickle
+  <<: *pickle
+  filepath: data/04_feature/vectorizer.joblib
+
+## Models
+model_svc:
+  <<: *pickle
+  filepath: data/06_models/svc.joblib
+
+model_random_forest:
+  <<: *pickle
+  filepath: data/06_models/random_forest.joblib
+
+model_logistic_regression:
+  <<: *pickle
+  filepath: data/06_models/logistic_regression.joblib
