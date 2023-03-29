@@ -38,6 +38,10 @@ $ kedro run
 # 2023-03-28 16:42:34,180 - kedro_sklearn.pipelines.preprocessing.nodes - INFO - ## Train preprocessing
 # 2023-03-28 16:42:34,180 - kedro_sklearn.pipelines.preprocessing.nodes - INFO - corpus size: 7613
 # [...]
+
+## Visualizing pipelines
+$ kedro viz
+# Open browser: http://127.0.0.1:4141/
 ```
 
 ---
