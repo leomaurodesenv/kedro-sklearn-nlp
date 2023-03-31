@@ -16,7 +16,7 @@ def create_pipeline(**kwargs) -> Pipeline:
                     train_X="train_X",
                     train_y="train_y",
                 ),
-                outputs="model_svc",
+                outputs=["model_svc", "metrics_svc"],
                 name="train_svc_node",
             ),
             node(
@@ -25,7 +25,7 @@ def create_pipeline(**kwargs) -> Pipeline:
                     train_X="train_X",
                     train_y="train_y",
                 ),
-                outputs="model_random_forest",
+                outputs=["model_random_forest", "metrics_random_forest"],
                 name="train_random_forest_node",
             ),
             node(
@@ -34,7 +34,7 @@ def create_pipeline(**kwargs) -> Pipeline:
                     train_X="train_X",
                     train_y="train_y",
                 ),
-                outputs="model_logistic_regression",
+                outputs=["model_logistic_regression", "metrics_logistic_regression"],
                 name="train_logistic_regression_node",
             ),
         ]

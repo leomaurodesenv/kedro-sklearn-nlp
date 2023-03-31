@@ -72,7 +72,7 @@ def _run_k_fold(model: any, train_X: any, train_y: any, k: int = 5) -> Dict:
     return metrics
 
 
-def train_logistic_regression(train_X: any, train_y: any) -> LogisticRegression:
+def train_logistic_regression(train_X: any, train_y: any) -> Tuple:
     """Train Logistic Regression
 
     Args:
@@ -80,6 +80,7 @@ def train_logistic_regression(train_X: any, train_y: any) -> LogisticRegression:
         train_y: Train label
     Returns:
         model: sklearn.linear_model.LogisticRegression
+        metrics: Dict of metrics
     """
     runtime = time.time()
     params = {
@@ -98,10 +99,10 @@ def train_logistic_regression(train_X: any, train_y: any) -> LogisticRegression:
     LOGGER.info("Avg F1-score %.4f seconds" % metrics["f1"])
     LOGGER.info("Runtime elapsed %.4f seconds" % runtime)
 
-    return model
+    return model, metrics
 
 
-def train_random_forest(train_X: any, train_y: any) -> RandomForestClassifier:
+def train_random_forest(train_X: any, train_y: any) -> Tuple:
     """Train Random Forest
 
     Args:
@@ -109,6 +110,7 @@ def train_random_forest(train_X: any, train_y: any) -> RandomForestClassifier:
         train_y: Train label
     Returns:
         model: sklearn.ensemble.RandomForestClassifier
+        metrics: Dict of metrics
     """
     runtime = time.time()
     model = RandomForestClassifier(n_estimators=100, max_depth=4, random_state=0)
@@ -122,10 +124,10 @@ def train_random_forest(train_X: any, train_y: any) -> RandomForestClassifier:
     LOGGER.info("Avg F1-score %.4f seconds" % metrics["f1"])
     LOGGER.info("Runtime elapsed %.4f seconds" % runtime)
 
-    return model
+    return model, metrics
 
 
-def train_svc(train_X: any, train_y: any) -> SVC:
+def train_svc(train_X: any, train_y: any) -> Tuple:
     """Train Support Vector Classifier (SVC)
 
     Args:
@@ -133,6 +135,7 @@ def train_svc(train_X: any, train_y: any) -> SVC:
         train_y: Train label
     Returns:
         model: sklearn.svm.SVC
+        metrics: Dict of metrics
     """
     runtime = time.time()
     model = SVC(kernel="rbf", gamma="auto", random_state=0)
@@ -146,4 +149,4 @@ def train_svc(train_X: any, train_y: any) -> SVC:
     LOGGER.info("Avg F1-score %.4f seconds" % metrics["f1"])
     LOGGER.info("Runtime elapsed %.4f seconds" % runtime)
 
-    return model
+    return model, metrics

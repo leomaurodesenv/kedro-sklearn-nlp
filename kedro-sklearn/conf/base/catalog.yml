@@ -12,6 +12,8 @@ _pickle: &pickle
   type: pickle.PickleDataSet
   backend: joblib
 
+_json: &json
+  type: json.JSONDataSet
 
 ## Dataset
 train:
@@ -34,12 +36,24 @@ feature_vectorizer:
 ## Models
 model_svc:
   <<: *pickle
-  filepath: data/06_models/svc.joblib
+  filepath: data/06_models/model-svc.joblib
 
 model_random_forest:
   <<: *pickle
-  filepath: data/06_models/random_forest.joblib
+  filepath: data/06_models/model-random_forest.joblib
 
 model_logistic_regression:
   <<: *pickle
-  filepath: data/06_models/logistic_regression.joblib
+  filepath: data/06_models/model-logistic_regression.joblib
+
+metrics_svc:
+  <<: *json
+  filepath: data/06_models/metrics-svc.json
+
+metrics_random_forest:
+  <<: *json
+  filepath: data/06_models/metrics-random_forest.json
+
+metrics_logistic_regression:
+  <<: *json
+  filepath: data/06_models/metrics-logistic_regression.json
