@@ -8,3 +8,6 @@ preprocessing:
   dataset:
     text_column: "text"
     target_column: "target"
+
+f1.metric: "f1"
+accuracy.metric: "accuracy"
