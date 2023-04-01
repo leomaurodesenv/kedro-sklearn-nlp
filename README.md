@@ -5,6 +5,21 @@
 
 This repository is learning code for designing a solution using Kedro. [Kedro](https://kedro.org/) is an open sourced Python framework for creating maintainable and modular data science code as pipelines. In the project, we are going to design a solution for competition [Detection of Disaster Tweets using Natural Language Processing](https://www.kaggle.com/competitions/nlp-getting-started/) techniques.
 
+> Note: This project contains the best performing solution I've gotten in this competition so far.
+
+<p align="center"><img src="./kedro-sklearn/docs/img/kaggle-score.jpeg"></p>
+
+---
+## Solution Architecture
+
+All the code generate output files, such as `model.pickle` and `data.csv`; you can access them in [data folder](kedro-sklearn/data).
+
+- [Preprocessing](kedro-sklearn/src/kedro_sklearn/pipelines/01_preprocessing) - Clean and tranform the text into vectors.
+- [Training](kedro-sklearn/src/kedro_sklearn/pipelines/02_training) - Train many models, using k-fold cross validation and grid search.
+- [Selection](kedro-sklearn/src/kedro_sklearn/pipelines/03_selection) - Select best model according to a specific metric.
+
+<p align="center"><img width="70%" src="./kedro-sklearn/docs/img/kedro-pipeline.png"></p>
+
 ---
 ## Code
 
