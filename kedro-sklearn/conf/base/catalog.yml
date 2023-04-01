@@ -28,10 +28,6 @@ sample_submission:
   <<: *csv
   filepath: data/01_raw/sample_submission.csv
 
-submission:
-  <<: *csv
-  filepath: data/07_model_output/submission.csv
-
 ## Features
 feature_vectorizer:
   <<: *pickle
@@ -65,10 +61,18 @@ metrics_logistic_regression:
 ## Selection
 f1.selected_model:
   <<: *pickle
-  filepath: data/06_models/selected_model-f1.pickle
+  filepath: data/06_models/f1.selected_model.pickle
   versioned: true
+
+f1.submission:
+  <<: *csv
+  filepath: data/07_model_output/f1.submission.csv
 
 accuracy.selected_model:
   <<: *pickle
-  filepath: data/06_models/selected_model-accuracy.pickle
+  filepath: data/06_models/accuracy.selected_model.pickle
   versioned: true
+
+accuracy.submission:
+  <<: *csv
+  filepath: data/07_model_output/accuracy.submission.csv
