@@ -4,10 +4,12 @@
 # Documentation for this file format can be found in "Parameters"
 # Link: https://docs.kedro.org/en/0.18.7/kedro_project_setup/configuration.html#parameters
 
+## Dataset
 preprocessing:
   dataset:
     text_column: "text"
     target_column: "target"
 
+## Selection
 f1.metric: "f1"
 accuracy.metric: "accuracy"
