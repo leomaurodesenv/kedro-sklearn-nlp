@@ -7,16 +7,26 @@ import time
 import logging
 import numpy as np
 import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
+from pathlib import Path
 from typing import Dict, List, Tuple, Union
 
 from sklearn.svm import SVC
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.linear_model import LogisticRegression
-
+from sklearn.metrics import classification_report
 from sklearn.model_selection import GridSearchCV, cross_validate
 
 
 LOGGER = logging.getLogger(__name__)
+
+
+def _classification_report(model_name, report_path, true_y, pred_y, labels=None, target_names=None) -> None:
+    report = classification_report(true_y, pred_y, labels=labels,
+                                   target_names=target_names, output_dict=True)
+    sns.heatmap(pd.DataFrame(report).iloc[:-1, :].T, annot=True)
+    plt.savefig(Path(report_path) / f"classification_report-{model_name}.png")
 
 
 def _run_grid_search(
@@ -72,7 +82,7 @@ def _run_k_fold(model: any, train_X: any, train_y: any, k: int = 5) -> Dict:
     return metrics
 
 
-def train_logistic_regression(train_X: any, train_y: any) -> Tuple:
+def train_logistic_regression(train_X: any, train_y: any, train_params: Dict) -> Tuple:
     """Train Logistic Regression
 
     Args:
@@ -93,6 +103,11 @@ def train_logistic_regression(train_X: any, train_y: any) -> Tuple:
     )
     runtime = time.time() - runtime
 
+    # Reporting
+    pred_y = model.predict(train_X)
+    _classification_report(model_name="logistic_regression", report_path=train_params["report_path"], true_y=train_y, pred_y=pred_y)
+
+
     # Logging
     LOGGER.info("## Random Forest Training")
     LOGGER.info("Avg Accuracy %.4f seconds" % metrics["accuracy"])
@@ -102,7 +117,7 @@ def train_logistic_regression(train_X: any, train_y: any) -> Tuple:
     return model, metrics
 
 
-def train_random_forest(train_X: any, train_y: any) -> Tuple:
+def train_random_forest(train_X: any, train_y: any, train_params: Dict) -> Tuple:
     """Train Random Forest
 
     Args:
@@ -118,6 +133,10 @@ def train_random_forest(train_X: any, train_y: any) -> Tuple:
     model.fit(train_X, train_y)
     runtime = time.time() - runtime
 
+    # Reporting
+    pred_y = model.predict(train_X)
+    _classification_report(model_name="random_forest", report_path=train_params["report_path"], true_y=train_y, pred_y=pred_y)
+
     # Logging
     LOGGER.info("## Random Forest Training")
     LOGGER.info("Avg Accuracy %.4f seconds" % metrics["accuracy"])
@@ -127,7 +146,7 @@ def train_random_forest(train_X: any, train_y: any) -> Tuple:
     return model, metrics
 
 
-def train_svc(train_X: any, train_y: any) -> Tuple:
+def train_svc(train_X: any, train_y: any, train_params: Dict) -> Tuple:
     """Train Support Vector Classifier (SVC)
 
     Args:
@@ -142,6 +161,10 @@ def train_svc(train_X: any, train_y: any) -> Tuple:
     metrics = _run_k_fold(model=model, train_X=train_X, train_y=train_y)
     model.fit(train_X, train_y)
     runtime = time.time() - runtime
+
+    # Reporting
+    pred_y = model.predict(train_X)
+    _classification_report(model_name="svc", report_path=train_params["report_path"], true_y=train_y, pred_y=pred_y)
 
     # Logging
     LOGGER.info("## SVC Training")

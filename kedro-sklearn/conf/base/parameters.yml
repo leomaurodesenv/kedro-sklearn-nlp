@@ -10,6 +10,10 @@ preprocessing:
     text_column: "text"
     target_column: "target"
 
+## Train
+train:
+  report_path: "data/08_reporting"
+
 ## Selection
 f1.metric: "f1"
 accuracy.metric: "accuracy"
