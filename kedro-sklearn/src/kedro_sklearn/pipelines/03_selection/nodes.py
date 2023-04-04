@@ -4,9 +4,9 @@ generated using Kedro 0.18.7
 """
 
 import logging
-import pandas as pd
 from typing import Dict, List, Tuple, Union
 
+import pandas as pd
 
 LOGGER = logging.getLogger(__name__)
 
@@ -51,9 +51,9 @@ def model_prediction(model: any, X_test: any, test_set: pd.DataFrame):
     Returns:
         submission (pd.DataFrame): Submission file
     """
-    target  = model.predict(X_test)
+    target = model.predict(X_test)
     id_test = test_set["id"].to_list()
-    submission = {'id':id_test, 'target':target}
+    submission = {"id": id_test, "target": target}
     df_submission = pd.DataFrame(submission)
 
     return df_submission

@@ -4,10 +4,10 @@ generated using Kedro 0.18.7
 """
 
 import logging
-import pandas as pd
 from typing import Dict, List, Tuple, Union
-from sklearn.feature_extraction.text import CountVectorizer
 
+import pandas as pd
+from sklearn.feature_extraction.text import CountVectorizer
 
 LOGGER = logging.getLogger(__name__)
 
