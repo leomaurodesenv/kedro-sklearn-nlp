@@ -7,16 +7,52 @@ import time
 import logging
 import numpy as np
 import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
+from pathlib import Path
 from typing import Dict, List, Tuple, Union
+from kedro.extras.datasets.matplotlib import MatplotlibWriter
 
 from sklearn.svm import SVC
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.linear_model import LogisticRegression
-
+from sklearn.metrics import classification_report
 from sklearn.model_selection import GridSearchCV, cross_validate
 
 
 LOGGER = logging.getLogger(__name__)
+
+
+def _classification_report(
+    model_name: str,
+    report_path: str,
+    true_y: any,
+    pred_y: any,
+    labels: any = None,
+    target_names: any = None,
+) -> None:
+    """Classification report image generator
+
+    Args:
+        model_name (str): Model name
+        report_path (str): Report path
+        true_y (list): True labels
+        train_y (list): Predicted labels
+        labels (list): List of records
+        target_names (list): Names of each label
+    Returns:
+        None
+    """
+    report = classification_report(
+        true_y, pred_y, labels=labels, target_names=target_names, output_dict=True
+    )
+
+    report_plot = sns.heatmap(pd.DataFrame(report).iloc[:-1, :].T, annot=True)
+    report_fig = report_plot.get_figure()
+    report_writer = MatplotlibWriter(
+        filepath=f"{report_path}/classification_report-{model_name}.png"
+    )
+    report_writer.save(report_fig)
 
 
 def _run_grid_search(
@@ -25,11 +61,11 @@ def _run_grid_search(
     """GridSearch Hyperparameter Tuning
 
     Args:
-        model: Model
-        params: Hyperparameters
-        train_X: Train data
-        train_y: Train label
-        k: Number of validations
+        model (any): Model
+        params (dict): Hyperparameters
+        train_X (any): Train data
+        train_y (any): Train label
+        k (int): Number of validations
     Returns:
         metrics: Avg results
     """
@@ -54,10 +90,10 @@ def _run_k_fold(model: any, train_X: any, train_y: any, k: int = 5) -> Dict:
     """k-Fold Cross Validation
 
     Args:
-        model: Model
-        train_X: Train data
-        train_y: Train label
-        k: Number of validations
+        model (any): Model
+        train_X (any): Train data
+        train_y (any): Train label
+        k (int): Number of validations
     Returns:
         metrics: Avg results
     """
@@ -72,15 +108,16 @@ def _run_k_fold(model: any, train_X: any, train_y: any, k: int = 5) -> Dict:
     return metrics
 
 
-def train_logistic_regression(train_X: any, train_y: any) -> Tuple:
+def train_logistic_regression(train_X: any, train_y: any, train_params: Dict) -> Tuple:
     """Train Logistic Regression
 
     Args:
-        train_X: Train data
-        train_y: Train label
+        train_X (any): Train data
+        train_y (any): Train label
+        train_params (dict): Training parameters
     Returns:
-        model: sklearn.linear_model.LogisticRegression
-        metrics: Dict of metrics
+        model (sklearn.linear_model.LogisticRegression)
+        metrics (dict): Dict of metrics
     """
     runtime = time.time()
     params = {
@@ -93,6 +130,15 @@ def train_logistic_regression(train_X: any, train_y: any) -> Tuple:
     )
     runtime = time.time() - runtime
 
+    # Reporting
+    pred_y = model.predict(train_X)
+    _classification_report(
+        model_name="logistic_regression",
+        report_path=train_params["report_path"],
+        true_y=train_y,
+        pred_y=pred_y,
+    )
+
     # Logging
     LOGGER.info("## Random Forest Training")
     LOGGER.info("Avg Accuracy %.4f seconds" % metrics["accuracy"])
@@ -102,15 +148,16 @@ def train_logistic_regression(train_X: any, train_y: any) -> Tuple:
     return model, metrics
 
 
-def train_random_forest(train_X: any, train_y: any) -> Tuple:
+def train_random_forest(train_X: any, train_y: any, train_params: Dict) -> Tuple:
     """Train Random Forest
 
     Args:
-        train_X: Train data
-        train_y: Train label
+        train_X (any): Train data
+        train_y (any): Train label
+        train_params (dict): Training parameters
     Returns:
-        model: sklearn.ensemble.RandomForestClassifier
-        metrics: Dict of metrics
+        model (sklearn.ensemble.RandomForestClassifier)
+        metrics (dict): Dict of metrics
     """
     runtime = time.time()
     model = RandomForestClassifier(n_estimators=100, max_depth=4, random_state=0)
@@ -118,6 +165,15 @@ def train_random_forest(train_X: any, train_y: any) -> Tuple:
     model.fit(train_X, train_y)
     runtime = time.time() - runtime
 
+    # Reporting
+    pred_y = model.predict(train_X)
+    _classification_report(
+        model_name="random_forest",
+        report_path=train_params["report_path"],
+        true_y=train_y,
+        pred_y=pred_y,
+    )
+
     # Logging
     LOGGER.info("## Random Forest Training")
     LOGGER.info("Avg Accuracy %.4f seconds" % metrics["accuracy"])
@@ -127,21 +183,31 @@ def train_random_forest(train_X: any, train_y: any) -> Tuple:
     return model, metrics
 
 
-def train_svc(train_X: any, train_y: any) -> Tuple:
+def train_svc(train_X: any, train_y: any, train_params: Dict) -> Tuple:
     """Train Support Vector Classifier (SVC)
 
     Args:
-        train_X: Train data
-        train_y: Train label
+        train_X (any): Train data
+        train_y (any): Train label
+        train_params (dict): Training parameters
     Returns:
-        model: sklearn.svm.SVC
-        metrics: Dict of metrics
+        model (sklearn.svm.SVC)
+        metrics (dict): Dict of metrics
     """
     runtime = time.time()
     model = SVC(kernel="rbf", gamma="auto", random_state=0)
     metrics = _run_k_fold(model=model, train_X=train_X, train_y=train_y)
     model.fit(train_X, train_y)
     runtime = time.time() - runtime
+
+    # Reporting
+    pred_y = model.predict(train_X)
+    _classification_report(
+        model_name="svc",
+        report_path=train_params["report_path"],
+        true_y=train_y,
+        pred_y=pred_y,
+    )
 
     # Logging
     LOGGER.info("## SVC Training")

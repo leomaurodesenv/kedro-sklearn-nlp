@@ -24,3 +24,5 @@ sphinx==6.1.3 # Documentation
 
 # For modelling in the data science pipeline
 scikit-learn~=1.0
+seaborn==0.12.2
+matplotlib==3.7.1
