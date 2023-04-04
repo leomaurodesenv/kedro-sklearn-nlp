@@ -11,6 +11,7 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 from pathlib import Path
 from typing import Dict, List, Tuple, Union
+from kedro.extras.datasets.matplotlib import MatplotlibWriter
 
 from sklearn.svm import SVC
 from sklearn.ensemble import RandomForestClassifier
@@ -22,11 +23,36 @@ from sklearn.model_selection import GridSearchCV, cross_validate
 LOGGER = logging.getLogger(__name__)
 
 
-def _classification_report(model_name, report_path, true_y, pred_y, labels=None, target_names=None) -> None:
-    report = classification_report(true_y, pred_y, labels=labels,
-                                   target_names=target_names, output_dict=True)
-    sns.heatmap(pd.DataFrame(report).iloc[:-1, :].T, annot=True)
-    plt.savefig(Path(report_path) / f"classification_report-{model_name}.png")
+def _classification_report(
+    model_name: str,
+    report_path: str,
+    true_y: any,
+    pred_y: any,
+    labels: any = None,
+    target_names: any = None,
+) -> None:
+    """Classification report image generator
+
+    Args:
+        model_name (str): Model name
+        report_path (str): Report path
+        true_y (list): True labels
+        train_y (list): Predicted labels
+        labels (list): List of records
+        target_names (list): Names of each label
+    Returns:
+        None
+    """
+    report = classification_report(
+        true_y, pred_y, labels=labels, target_names=target_names, output_dict=True
+    )
+
+    report_plot = sns.heatmap(pd.DataFrame(report).iloc[:-1, :].T, annot=True)
+    report_fig = report_plot.get_figure()
+    report_writer = MatplotlibWriter(
+        filepath=f"{report_path}/classification_report-{model_name}.png"
+    )
+    report_writer.save(report_fig)
 
 
 def _run_grid_search(
@@ -105,8 +131,12 @@ def train_logistic_regression(train_X: any, train_y: any, train_params: Dict) ->
 
     # Reporting
     pred_y = model.predict(train_X)
-    _classification_report(model_name="logistic_regression", report_path=train_params["report_path"], true_y=train_y, pred_y=pred_y)
-
+    _classification_report(
+        model_name="logistic_regression",
+        report_path=train_params["report_path"],
+        true_y=train_y,
+        pred_y=pred_y,
+    )
 
     # Logging
     LOGGER.info("## Random Forest Training")
@@ -135,7 +165,12 @@ def train_random_forest(train_X: any, train_y: any, train_params: Dict) -> Tuple
 
     # Reporting
     pred_y = model.predict(train_X)
-    _classification_report(model_name="random_forest", report_path=train_params["report_path"], true_y=train_y, pred_y=pred_y)
+    _classification_report(
+        model_name="random_forest",
+        report_path=train_params["report_path"],
+        true_y=train_y,
+        pred_y=pred_y,
+    )
 
     # Logging
     LOGGER.info("## Random Forest Training")
@@ -164,7 +199,12 @@ def train_svc(train_X: any, train_y: any, train_params: Dict) -> Tuple:
 
     # Reporting
     pred_y = model.predict(train_X)
-    _classification_report(model_name="svc", report_path=train_params["report_path"], true_y=train_y, pred_y=pred_y)
+    _classification_report(
+        model_name="svc",
+        report_path=train_params["report_path"],
+        true_y=train_y,
+        pred_y=pred_y,
+    )
 
     # Logging
     LOGGER.info("## SVC Training")
