@@ -3,22 +3,21 @@ This is a boilerplate pipeline 'training'
 generated using Kedro 0.18.7
 """
 
-import time
 import logging
+import time
+from pathlib import Path
+from typing import Dict, List, Tuple, Union
+
+import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import seaborn as sns
-import matplotlib.pyplot as plt
-from pathlib import Path
-from typing import Dict, List, Tuple, Union
 from kedro.extras.datasets.matplotlib import MatplotlibWriter
-
-from sklearn.svm import SVC
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import classification_report
 from sklearn.model_selection import GridSearchCV, cross_validate
-
+from sklearn.svm import SVC
 
 LOGGER = logging.getLogger(__name__)
 

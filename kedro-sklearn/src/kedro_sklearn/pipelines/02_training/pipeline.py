@@ -4,7 +4,8 @@ generated using Kedro 0.18.7
 """
 
 from kedro.pipeline import Pipeline, node, pipeline
-from .nodes import train_svc, train_random_forest, train_logistic_regression
+
+from .nodes import train_logistic_regression, train_random_forest, train_svc
 
 
 def create_pipeline(**kwargs) -> Pipeline:

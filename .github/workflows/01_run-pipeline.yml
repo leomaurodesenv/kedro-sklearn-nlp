@@ -12,7 +12,7 @@ jobs:
                 python-version: '3.9'
                 cache: 'pip' # caching pip dependencies
             - run: pip install -r kedro-sklearn/src/requirements.txt
-            - name: Install libraries
+            - name: Install lint libraries
               run: |
                 pip install black
                 pip install isort

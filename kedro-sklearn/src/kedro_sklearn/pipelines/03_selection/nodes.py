@@ -4,9 +4,9 @@ generated using Kedro 0.18.7
 """
 
 import logging
-import pandas as pd
 from typing import Dict, List, Tuple, Union
 
+import pandas as pd
 
 LOGGER = logging.getLogger(__name__)
 
