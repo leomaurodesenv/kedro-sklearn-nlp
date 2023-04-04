@@ -1,4 +1,4 @@
-name: 01. Run Pipelines
+name: 01. Run Pipeline Tests
 run-name: Running "${{ github.ref }}" by "${{ github.actor }}"
 on: [push]
 jobs:
@@ -11,8 +11,8 @@ jobs:
                 python-version: '3.9'
                 cache: 'pip' # caching pip dependencies
             - run: pip install -r kedro-sklearn/src/requirements.txt
-            - name: Run kedro pipeline
+            - name: Run pipeline tests
               run: |
                 ls ${{ github.workspace }}
                 cd kedro-sklearn
-                kedro run --runner=ParallelRunner
+                pytest
