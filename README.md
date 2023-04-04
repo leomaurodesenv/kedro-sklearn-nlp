@@ -46,6 +46,7 @@ $ pip install -r src/requirements.txt
 
 ## Running
 $ kedro run
+$ kedro run --runner=ParallelRunner # or, run in parallel
 ## Output:
 # 2023-03-28 16:42:31,283 - kedro.framework.session.session - INFO - Kedro project kedro-sklearn
 # 2023-03-28 16:42:33,769 - kedro.io.data_catalog - INFO - Loading data from 'train' (CSVDataSet)...

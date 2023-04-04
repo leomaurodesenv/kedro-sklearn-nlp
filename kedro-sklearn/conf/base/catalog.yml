@@ -8,9 +8,13 @@ _csv: &csv
   load_args:
     sep: ','
 
-_pickle: &pickle
+_joblib: &joblib
   type: pickle.PickleDataSet
   backend: joblib
+
+_pickle: &pickle
+  type: pickle.PickleDataSet
+  backend: pickle
 
 _json: &json
   type: json.JSONDataSet
@@ -28,22 +32,35 @@ sample_submission:
   <<: *csv
   filepath: data/01_raw/sample_submission.csv
 
+## Preprocessing
+train_X:
+  <<: *pickle
+  filepath: data/05_model_input/train_X.pkl
+
+train_y:
+  <<: *pickle
+  filepath: data/05_model_input/train_y.pkl
+
+test_X:
+  <<: *pickle
+  filepath: data/05_model_input/test_X.pkl
+
 ## Features
 feature_vectorizer:
-  <<: *pickle
+  <<: *joblib
   filepath: data/04_feature/vectorizer.joblib
 
 ## Models
 model_svc:
-  <<: *pickle
+  <<: *joblib
   filepath: data/06_models/model-svc.joblib
 
 model_random_forest:
-  <<: *pickle
+  <<: *joblib
   filepath: data/06_models/model-random_forest.joblib
 
 model_logistic_regression:
-  <<: *pickle
+  <<: *joblib
   filepath: data/06_models/model-logistic_regression.joblib
 
 metrics_svc:
@@ -60,8 +77,8 @@ metrics_logistic_regression:
 
 ## Selection
 f1.selected_model:
-  <<: *pickle
-  filepath: data/06_models/f1.selected_model.pickle
+  <<: *joblib
+  filepath: data/06_models/f1.selected_model.joblib
   versioned: true
 
 f1.submission:
@@ -69,8 +86,8 @@ f1.submission:
   filepath: data/07_model_output/f1.submission.csv
 
 accuracy.selected_model:
-  <<: *pickle
-  filepath: data/06_models/accuracy.selected_model.pickle
+  <<: *joblib
+  filepath: data/06_models/accuracy.selected_model.joblib
   versioned: true
 
 accuracy.submission:
