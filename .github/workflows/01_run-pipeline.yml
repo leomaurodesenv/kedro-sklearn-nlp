@@ -1,8 +1,8 @@
-name: 01. Run Pipeline Tests
+name: 01. Pipeline Tests
 run-name: Running "${{ github.ref }}" by "${{ github.actor }}"
 on: [push]
 jobs:
-    running-pipeline:
+    tests-pipeline:
         runs-on: ubuntu-latest
         steps:
             - uses: actions/checkout@v3
