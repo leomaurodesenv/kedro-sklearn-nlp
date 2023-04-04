@@ -16,12 +16,12 @@ def preprocess_train(train_set: pd.DataFrame, parameters: Dict) -> Tuple:
     """Preprocesses
 
     Args:
-        train_set: Raw data
-        parameters: Dataset parameters
+        train_set (pd.DataFrame): Raw data
+        parameters (dict): Dataset parameters
     Returns:
-        vectorizer: Corpus vectorizer
-        X: numpy array of the corpus
-        y: numpy array of the labels
+        vectorizer (any): Corpus vectorizer
+        X (any): numpy array of the corpus
+        y (any): numpy array of the labels
     """
     # Vectorizer the dataset
     corpus = train_set[parameters["text_column"]]
@@ -43,11 +43,11 @@ def preprocess_test(test_set: pd.DataFrame, vectorizer: any, parameters: Dict) -
     """Preprocesses test
 
     Args:
-        test_set: Raw data
-        vectorizer: Corpus vectorizer
-        parameters: Dataset parameters
+        test_set (pd.DataFrame): Raw data
+        vectorizer (any): Corpus vectorizer
+        parameters (dict): Dataset parameters
     Returns:
-        X: numpy array of the corpus
+        X (any): numpy array of the corpus
     """
     # Vectorizer the dataset
     corpus = test_set[parameters["text_column"]]

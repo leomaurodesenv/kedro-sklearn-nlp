@@ -15,11 +15,11 @@ def model_selection(metric_name: str, **kargs) -> any:
     """Model selection
 
     Args:
-        model_{index}: Model
-        metric_{index}: Model metrics
-        metric_name: Principal metric
+        model_{index} (any): Model
+        metric_{index} (str): Model metrics
+        metric_name (str): Principal metric
     Returns:
-        best_model: Best model according to the metric
+        best_model (any): Best model according to the metric
     """
     idx = 0
     best_model = kargs["model_0"]
@@ -45,11 +45,11 @@ def model_prediction(model: any, X_test: any, test_set: pd.DataFrame):
     """Model prediction
 
     Args:
-        model: Best model
-        X_test: Input test data
-        test_set: Test dataset
+        model (any): Best model
+        X_test (any): Input test data
+        test_set (any): Test dataset
     Returns:
-        submission: Submission file
+        submission (pd.DataFrame): Submission file
     """
     target  = model.predict(X_test)
     id_test = test_set["id"].to_list()

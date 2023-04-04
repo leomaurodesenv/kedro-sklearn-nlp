@@ -114,7 +114,7 @@ def train_logistic_regression(train_X: any, train_y: any, train_params: Dict) ->
     Args:
         train_X (any): Train data
         train_y (any): Train label
-        train_params (dict): Parameters for training
+        train_params (dict): Training parameters
     Returns:
         model (sklearn.linear_model.LogisticRegression)
         metrics (dict): Dict of metrics
@@ -154,7 +154,7 @@ def train_random_forest(train_X: any, train_y: any, train_params: Dict) -> Tuple
     Args:
         train_X (any): Train data
         train_y (any): Train label
-        train_params (dict): Parameters for training
+        train_params (dict): Training parameters
     Returns:
         model (sklearn.ensemble.RandomForestClassifier)
         metrics (dict): Dict of metrics
@@ -189,7 +189,7 @@ def train_svc(train_X: any, train_y: any, train_params: Dict) -> Tuple:
     Args:
         train_X (any): Train data
         train_y (any): Train label
-        train_params (dict): Parameters for training
+        train_params (dict): Training parameters
     Returns:
         model (sklearn.svm.SVC)
         metrics (dict): Dict of metrics
