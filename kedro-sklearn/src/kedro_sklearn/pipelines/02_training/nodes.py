@@ -61,11 +61,11 @@ def _run_grid_search(
     """GridSearch Hyperparameter Tuning
 
     Args:
-        model: Model
-        params: Hyperparameters
-        train_X: Train data
-        train_y: Train label
-        k: Number of validations
+        model (any): Model
+        params (dict): Hyperparameters
+        train_X (any): Train data
+        train_y (any): Train label
+        k (int): Number of validations
     Returns:
         metrics: Avg results
     """
@@ -90,10 +90,10 @@ def _run_k_fold(model: any, train_X: any, train_y: any, k: int = 5) -> Dict:
     """k-Fold Cross Validation
 
     Args:
-        model: Model
-        train_X: Train data
-        train_y: Train label
-        k: Number of validations
+        model (any): Model
+        train_X (any): Train data
+        train_y (any): Train label
+        k (int): Number of validations
     Returns:
         metrics: Avg results
     """
@@ -112,11 +112,12 @@ def train_logistic_regression(train_X: any, train_y: any, train_params: Dict) ->
     """Train Logistic Regression
 
     Args:
-        train_X: Train data
-        train_y: Train label
+        train_X (any): Train data
+        train_y (any): Train label
+        train_params (dict): Parameters for training
     Returns:
-        model: sklearn.linear_model.LogisticRegression
-        metrics: Dict of metrics
+        model (sklearn.linear_model.LogisticRegression)
+        metrics (dict): Dict of metrics
     """
     runtime = time.time()
     params = {
@@ -151,11 +152,12 @@ def train_random_forest(train_X: any, train_y: any, train_params: Dict) -> Tuple
     """Train Random Forest
 
     Args:
-        train_X: Train data
-        train_y: Train label
+        train_X (any): Train data
+        train_y (any): Train label
+        train_params (dict): Parameters for training
     Returns:
-        model: sklearn.ensemble.RandomForestClassifier
-        metrics: Dict of metrics
+        model (sklearn.ensemble.RandomForestClassifier)
+        metrics (dict): Dict of metrics
     """
     runtime = time.time()
     model = RandomForestClassifier(n_estimators=100, max_depth=4, random_state=0)
@@ -185,11 +187,12 @@ def train_svc(train_X: any, train_y: any, train_params: Dict) -> Tuple:
     """Train Support Vector Classifier (SVC)
 
     Args:
-        train_X: Train data
-        train_y: Train label
+        train_X (any): Train data
+        train_y (any): Train label
+        train_params (dict): Parameters for training
     Returns:
-        model: sklearn.svm.SVC
-        metrics: Dict of metrics
+        model (sklearn.svm.SVC)
+        metrics (dict): Dict of metrics
     """
     runtime = time.time()
     model = SVC(kernel="rbf", gamma="auto", random_state=0)
