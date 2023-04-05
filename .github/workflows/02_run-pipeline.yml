@@ -10,7 +10,6 @@ jobs:
   ## Run pipeline
   run-pipeline:
     runs-on: ubuntu-22.04
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-python@v4
@@ -32,10 +31,3 @@ jobs:
         with:
           name: submission-files
           path: kedro-sklearn/data/07_model_output/*.csv
-
-  ## Tests fail
-  on-failure:
-    runs-on: ubuntu-22.04
-    if: ${{ github.event.workflow_run.conclusion == 'failure' }}
-    steps:
-      - run: echo 'The triggering workflow failed'
