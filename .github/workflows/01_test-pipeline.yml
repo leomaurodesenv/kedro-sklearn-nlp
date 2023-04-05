@@ -37,9 +37,34 @@ jobs:
           python-version: "3.9"
           cache: "pip" # caching pip dependencies
       - run: pip install -r kedro-sklearn/src/requirements.txt
+      - run: kedro info
+      - run: ls ${{ github.workspace }}
       - name: Run tests
         run: |
-          ls ${{ github.workspace }}
           cd kedro-sklearn
-          pytest
+          kedro test
           cd ..
+
+  ## Build package
+  build-package:
+    needs: [run-tests]
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: "3.9"
+          cache: "pip" # caching pip dependencies
+      - run: pip install -r kedro-sklearn/src/requirements.txt
+      - run: kedro info
+      - run: ls ${{ github.workspace }}
+      - name: Create package
+        run: |
+          cd kedro-sklearn
+          kedro package
+          cd ..
+      - name: Dump package artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: project-package
+          path: kedro-sklearn/dist
