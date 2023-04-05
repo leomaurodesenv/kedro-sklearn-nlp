@@ -18,13 +18,16 @@ jobs:
           python-version: "3.9"
           cache: "pip" # caching pip dependencies
       - run: pip install -r kedro-sklearn/src/requirements.txt
+      - run: kedro info
+      - run: ls ${{ github.workspace }}
       - name: Run pipeline
         run: |
-          ls ${{ github.workspace }}
           cd kedro-sklearn
-          kedro run --runner=ParallelRunner
+          ls -l
+          ls /data/01_raw
+          kedro run
           cd ..
-      - name: Save submission artifact
+      - name: Dump submission artifacts
         uses: actions/upload-artifact@v3
         with:
           name: submission-files
