@@ -24,7 +24,7 @@ jobs:
         run: |
           cd kedro-sklearn
           ls -l
-          ls /data/01_raw
+          ls data/01_raw
           kedro run
           cd ..
       - name: Dump submission artifacts
