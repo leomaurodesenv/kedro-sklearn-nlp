@@ -1,0 +1,29 @@
+name: 02. Run Pipeline
+run-name: Running "${{ github.ref }}" by "${{ github.actor }}"
+on:
+  workflow_run:
+    workflows: [01. Run Tests]
+    types:
+      - completed
+jobs:
+  ## Run pipeline
+  run-pipeline:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+          cache: 'pip' # caching pip dependencies
+      - run: pip install -r kedro-sklearn/src/requirements.txt
+      - name: Run pipeline
+        run: |
+          ls ${{ github.workspace }}
+          cd kedro-sklearn
+          kedro run --runner=ParallelRunner
+          cd ..
+      - name: Save submission artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: submission-files
+          path: kedro-sklearn/data/07_model_output/*.csv
