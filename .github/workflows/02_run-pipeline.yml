@@ -1,20 +1,22 @@
-name: 02. Run Pipeline
-run-name: Running "${{ github.ref }}" by "${{ github.actor }}"
+name: "02. Run Pipeline"
+run-name: Pipeline running "${{ github.ref }}" by "${{ github.actor }}"
 on:
   workflow_run:
-    workflows: [01. Run Tests]
-    types:
-      - completed
+    workflows: ["01. Run Tests"]
+    types: [completed]
+  workflow_dispatch:
+
 jobs:
   ## Run pipeline
   run-pipeline:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-python@v4
         with:
-          python-version: '3.9'
-          cache: 'pip' # caching pip dependencies
+          python-version: "3.9"
+          cache: "pip" # caching pip dependencies
       - run: pip install -r kedro-sklearn/src/requirements.txt
       - name: Run pipeline
         run: |
@@ -27,3 +29,10 @@ jobs:
         with:
           name: submission-files
           path: kedro-sklearn/data/07_model_output/*.csv
+
+  ## Tests fail
+  on-failure:
+    runs-on: ubuntu-22.04
+    if: ${{ github.event.workflow_run.conclusion == 'failure' }}
+    steps:
+      - run: echo 'The triggering workflow failed'

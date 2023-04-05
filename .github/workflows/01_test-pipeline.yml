@@ -1,16 +1,21 @@
-name: 01. Run Tests
-run-name: Running "${{ github.ref }}" by "${{ github.actor }}"
-on: [push]
+name: "01. Run Tests"
+run-name: Running tests "${{ github.ref }}" by "${{ github.actor }}"
+on:
+  push:
+    # Sequence of patterns matched against refs/heads
+    branches-ignore:
+      - "dev/*"
+
 jobs:
   ## Python linter check
   python-linter:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-python@v4
         with:
-          python-version: '3.9'
-          cache: 'pip' # caching pip dependencies
+          python-version: "3.9"
+          cache: "pip" # caching pip dependencies
       - run: pip install -r kedro-sklearn/src/requirements.txt
       - name: Install lint libraries
         run: |
@@ -24,13 +29,13 @@ jobs:
   ## Run tests
   run-tests:
     if: success() || failure()
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-python@v4
         with:
-          python-version: '3.9'
-          cache: 'pip' # caching pip dependencies
+          python-version: "3.9"
+          cache: "pip" # caching pip dependencies
       - run: pip install -r kedro-sklearn/src/requirements.txt
       - name: Run tests
         run: |
