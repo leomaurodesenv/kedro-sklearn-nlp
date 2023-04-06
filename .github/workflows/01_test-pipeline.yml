@@ -42,7 +42,7 @@ jobs:
       - name: Run tests
         run: |
           cd kedro-sklearn
-          kedro test
+          pytest --disable-warnings
           cd ..
 
   ## Build package
