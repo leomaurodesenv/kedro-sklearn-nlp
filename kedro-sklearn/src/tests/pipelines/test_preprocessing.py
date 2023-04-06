@@ -54,9 +54,9 @@ class TestPreprocessingPipeline:
 
 
 @pytest.fixture
-def train_dataset():
+def dataset():
     """Get train dataset"""
-    train_set = pd.DataFrame(
+    dataset = pd.DataFrame(
         data={
             "text": ["happy test", "sad test", "really sad test"],
             "target": [1, 0, 0],
@@ -66,29 +66,29 @@ def train_dataset():
         "text_column": "text",
         "target_column": "target",
     }
-    return train_set, parameters
+    return dataset, parameters
 
 
 class TestPreprocessingNodes:
     """Preprocessing nodes tests"""
 
-    def test_preprocess_train_vectorizer(self, train_dataset):
+    def test_preprocess_train_vectorizer(self, dataset):
         """Test preprocess_train method"""
-        train_set, parameters = train_dataset
+        train_set, parameters = dataset
         vectorizer, _, _ = nodes.preprocess_train(
             train_set=train_set, parameters=parameters
         )
         assert vectorizer is not None
 
-    def test_preprocess_train_arrays(self, train_dataset):
+    def test_preprocess_train_arrays(self, dataset):
         """Test preprocess_train method"""
-        train_set, parameters = train_dataset
+        train_set, parameters = dataset
         _, X, y = nodes.preprocess_train(train_set=train_set, parameters=parameters)
         assert X.shape[0] == y.shape[0]
 
-    def test_preprocess_test(self, train_dataset):
+    def test_preprocess_test(self, dataset):
         """Test preprocess_test method"""
-        train_set, parameters = train_dataset
+        train_set, parameters = dataset
         vectorizer, X, _ = nodes.preprocess_train(
             train_set=train_set, parameters=parameters
         )
