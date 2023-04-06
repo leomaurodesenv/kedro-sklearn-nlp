@@ -9,22 +9,33 @@ https://docs.pytest.org/en/latest/getting-started.html
 """
 from pathlib import Path
 
+import pandas as pd
 import pytest
-from kedro.pipeline import Pipeline, node
-from kedro.framework.session import KedroSession
-from kedro.framework.startup import bootstrap_project
-
-from kedro.io import DataCatalog
+from kedro.config import ConfigLoader
+from kedro.framework.context import KedroContext
+from kedro.framework.hooks import _create_hook_manager
+from kedro.framework.project import settings
+from kedro.pipeline import Pipeline
 from kedro.runner import SequentialRunner
 
-from kedro_sklearn.pipelines.preprocessing.pipeline import create_pipeline
+from kedro_sklearn.pipelines.preprocessing import nodes, pipeline
 
 
 @pytest.fixture
-def config_session():
-    project_path = Path.cwd()
-    bootstrap_project(project_path)
-    return KedroSession.create(project_path=project_path, env="base")
+def config_loader():
+    """Get config loader"""
+    return ConfigLoader(conf_source=str(Path.cwd() / settings.CONF_SOURCE))
+
+
+@pytest.fixture
+def project_context(config_loader):
+    """Get kedro context"""
+    return KedroContext(
+        package_name="kedro_sklearn",
+        project_path=Path.cwd(),
+        config_loader=config_loader,
+        hook_manager=_create_hook_manager(),
+    )
 
 
 class TestPreprocessingPipeline:
@@ -32,31 +43,56 @@ class TestPreprocessingPipeline:
 
     def test_pipeline_creation(self):
         """Test create_pipeline method"""
-        pipeline = create_pipeline()
-        assert isinstance(pipeline, Pipeline)
+        pipeline_list = pipeline.create_pipeline()
+        assert isinstance(pipeline_list, Pipeline)
 
-    def test_pipeline_run(self, config_session):
+    def test_pipeline_run(self, project_context):
         """Test run the pipeline"""
-        with config_session as session:
-            session.run(pipeline_name="preprocessing")
-        assert True
-
-    def test_pipeline_run2(self, config_session):
-        """Test run the pipeline"""
-        # the sequential runner is the simplest. It runs one node at a time.
         runner = SequentialRunner()
-        # pipeline = create_pipeline()
-        pipeline = Pipeline(
-            [
-                node(lambda: range(100), None, "range"),
-                node(lambda x: [i ** 2 for i in x], "range", "range**2"),
-                node(lambda x: [i for i in x if i > 5000], "range**2", "range>5k"),
-                node(lambda x: x[:5], "range>5k", "range>5k-head"),
-                node(lambda x: sum(x) / len(x), "range>5k", "range>5k-mean"),
-            ]
+        pipeline_list = pipeline.create_pipeline()
+        runner.run(pipeline_list, project_context.catalog)
+
+
+@pytest.fixture
+def train_dataset():
+    """Get train dataset"""
+    train_set = pd.DataFrame(
+        data={
+            "text": ["happy test", "sad test", "really sad test"],
+            "target": [1, 0, 0],
+        }
+    )
+    parameters = {
+        "text_column": "text",
+        "target_column": "target",
+    }
+    return train_set, parameters
+
+
+class TestPreprocessingNodes:
+    """Preprocessing nodes tests"""
+
+    def test_preprocess_train_vectorizer(self, train_dataset):
+        """Test preprocess_train method"""
+        train_set, parameters = train_dataset
+        vectorizer, _, _ = nodes.preprocess_train(
+            train_set=train_set, parameters=parameters
         )
+        assert vectorizer is not None
 
-        # to get up and running, you can use an empty catalog
-        catalog = DataCatalog()
+    def test_preprocess_train_arrays(self, train_dataset):
+        """Test preprocess_train method"""
+        train_set, parameters = train_dataset
+        _, X, y = nodes.preprocess_train(train_set=train_set, parameters=parameters)
+        assert X.shape[0] == y.shape[0]
 
-        runner.run(pipeline, catalog)
+    def test_preprocess_test(self, train_dataset):
+        """Test preprocess_test method"""
+        train_set, parameters = train_dataset
+        vectorizer, X, _ = nodes.preprocess_train(
+            train_set=train_set, parameters=parameters
+        )
+        test_X = nodes.preprocess_test(
+            test_set=train_set, vectorizer=vectorizer, parameters=parameters
+        )
+        assert (X.shape[0] == test_X.shape[0]) and (X.shape[1] == test_X.shape[1])
