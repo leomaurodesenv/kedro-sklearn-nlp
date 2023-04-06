@@ -1,9 +1,12 @@
 name: "02. Run Pipeline"
 run-name: Pipeline running "${{ github.ref }}" by "${{ github.actor }}"
 on:
+  # Run after the tests
   workflow_run:
     workflows: ["01. Run Tests"]
     types: [completed]
+    branches: [master]
+  # or, Run manually
   workflow_dispatch:
 
 jobs:
