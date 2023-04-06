@@ -58,6 +58,7 @@ def dataset():
     """Get train dataset"""
     dataset = pd.DataFrame(
         data={
+            "id": [0, 1, 2],
             "text": ["happy test", "sad test", "really sad test"],
             "target": [1, 0, 0],
         }

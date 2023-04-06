@@ -11,8 +11,8 @@ from pathlib import Path
 
 import pytest
 from kedro.pipeline import Pipeline
-
 from sklearn.datasets import make_classification
+
 from kedro_sklearn.pipelines.training import nodes, pipeline
 
 
