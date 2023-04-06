@@ -2,7 +2,7 @@ name: "01. Run Tests"
 run-name: Running tests "${{ github.ref }}" by "${{ github.actor }}"
 on:
   push:
-    # Sequence of patterns matched against refs/heads
+    # Ignore following branches
     branches-ignore:
       - "dev/*"
 
