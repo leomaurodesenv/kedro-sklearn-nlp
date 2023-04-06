@@ -1,6 +1,6 @@
+name: "Changelog"
+
 on:
-  push:
-    branches: [master]
   release:
     type: published
 
