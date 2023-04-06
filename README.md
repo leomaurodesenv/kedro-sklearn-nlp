@@ -1,6 +1,6 @@
 [![MIT license](https://img.shields.io/static/v1?label=License&message=MIT&color=blue&style=flat-square)](LICENSE)
 [![GitHub](https://img.shields.io/static/v1?label=Code&message=GitHub&color=blue&style=flat-square)](https://github.com/leomaurodesenv/kedro-sklearn)
-[![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/leomaurodesenv/kedro-sklearn/01_test-pipeline.yml?label=Build&style=flat-square)](https://github.com/leomaurodesenv/kedro-sklearn/actions/workflows/01_test-pipeline.yml)
+[![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/leomaurodesenv/kedro-sklearn/test-pipeline.yml?label=Build&style=flat-square)](https://github.com/leomaurodesenv/kedro-sklearn/actions/workflows/test-pipeline.yml)
    
 
 This repository is learning code for designing a solution using Kedro. [Kedro](https://kedro.org/) is an open sourced Python framework for creating maintainable and modular data science code as pipelines. In the project, we are going to design a solution for competition [Detection of Disaster Tweets using Natural Language Processing](https://www.kaggle.com/competitions/nlp-getting-started/) techniques.
