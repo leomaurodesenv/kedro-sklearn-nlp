@@ -1,5 +1,7 @@
-[![MIT license](https://img.shields.io/static/v1?label=License&message=MIT&color=blue&style=flat-square)](LICENSE)
+# Kedro using Sklearn and NLP
+
 [![GitHub](https://img.shields.io/static/v1?label=Code&message=GitHub&color=blue&style=flat-square)](https://github.com/leomaurodesenv/kedro-sklearn)
+[![MIT license](https://img.shields.io/static/v1?label=License&message=MIT&color=blue&style=flat-square)](LICENSE)
 [![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/leomaurodesenv/kedro-sklearn/test-pipeline.yml?label=Build&style=flat-square)](https://github.com/leomaurodesenv/kedro-sklearn/actions/workflows/test-pipeline.yml)
    
 
