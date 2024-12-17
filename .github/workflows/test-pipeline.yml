@@ -17,13 +17,9 @@ jobs:
       - uses: actions/checkout@v3
       - uses: actions/setup-python@v4
         with:
-          python-version: "3.9"
+          python-version: "3.8"
           cache: "pip" # caching pip dependencies
       - run: pip install -r kedro-sklearn/src/requirements.txt
-      - name: Install lint libraries
-        run: |
-          pip install black
-          pip install isort
         # pip install pylint
       - run: black --check kedro-sklearn/src
       - run: isort --profile black --check kedro-sklearn/src
