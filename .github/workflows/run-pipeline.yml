@@ -29,7 +29,7 @@ jobs:
           kedro run
           cd ..
       - name: Dump submission artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: submission-files
           path: kedro-sklearn/data/07_model_output/*.csv
